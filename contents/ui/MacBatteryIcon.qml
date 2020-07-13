@@ -16,7 +16,7 @@ Item {
 		anchors.rightMargin: 2
 		color: "transparent"
 		border.color: normalColor
-		radius: 2
+		radius: 4
 
 		Item {
 			anchors.fill: parent
@@ -45,7 +45,7 @@ Item {
 		anchors.left: container.right
 		anchors.leftMargin: 1
 		anchors.verticalCenter: parent.verticalCenter
-		radius: 2
+		radius: 4
 		height: parent.height / 3
 		width: 2
 		color: normalColor
