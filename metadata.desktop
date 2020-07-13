@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Inline Battery
+Name=mcOS BS Inline Battery
 
 Type=Service
 Icon=battery
@@ -8,7 +8,7 @@ X-KDE-ServiceTypes=Plasma/Applet
 X-Plasma-API=declarativeappletscript
 X-Plasma-MainScript=ui/main.qml
 
-X-KDE-PluginInfo-Author=Kelvin Zhang
+X-KDE-PluginInfo-Author=Kelvin Zhang. Modified by F.Korpsvrat
 X-KDE-PluginInfo-Email=me@kelvinzhang.ca
 X-KDE-PluginInfo-Name=org.kde.plasma.inlineBattery
 X-KDE-PluginInfo-Version=5
