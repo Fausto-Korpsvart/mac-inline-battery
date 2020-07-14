@@ -20,7 +20,7 @@ Item {
 
 		Item {
 			anchors.fill: parent
-			anchors.margins: 2
+			anchors.margins: 2.5
 
 			Rectangle {
 				// Charged % Fill
@@ -37,6 +37,7 @@ Item {
 					}
 				}
 				width: parent.width * Math.max(0, Math.min(charge, 100)) / 100
+				radius: 2.5
 			}
 		}
 	}
@@ -45,7 +46,7 @@ Item {
 		anchors.left: container.right
 		anchors.leftMargin: 1
 		anchors.verticalCenter: parent.verticalCenter
-		radius: 4
+		radius: 5
 		height: parent.height / 3
 		width: 2
 		color: normalColor
