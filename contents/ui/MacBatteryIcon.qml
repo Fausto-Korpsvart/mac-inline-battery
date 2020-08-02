@@ -16,11 +16,13 @@ Item {
 		anchors.rightMargin: 2
 		color: "transparent"
 		border.color: normalColor
-		radius: 4
+		radius: 4.5
 
 		Item {
 			anchors.fill: parent
-			anchors.margins: 2.5
+			anchors.margins: 2.6
+			
+			radius: 2.4
 
 			Rectangle {
 				// Charged % Fill
@@ -37,7 +39,6 @@ Item {
 					}
 				}
 				width: parent.width * Math.max(0, Math.min(charge, 100)) / 100
-				radius: 2.5
 			}
 		}
 	}
@@ -46,9 +47,9 @@ Item {
 		anchors.left: container.right
 		anchors.leftMargin: 1
 		anchors.verticalCenter: parent.verticalCenter
-		radius: 5
-		height: parent.height / 3
-		width: 2
+		radius: 4
+		height: parent.height / 4
+		width: 1.3
 		color: normalColor
 	}
 }
