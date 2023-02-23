@@ -22,8 +22,6 @@ Item {
 			anchors.fill: parent
 			anchors.margins: 2.6
 			
-			radius: 2.4
-
 			Rectangle {
 				// Charged % Fill
 				anchors.left: parent.left
@@ -39,6 +37,7 @@ Item {
 					}
 				}
 				width: parent.width * Math.max(0, Math.min(charge, 100)) / 100
+				radius: 2.4
 			}
 		}
 	}
