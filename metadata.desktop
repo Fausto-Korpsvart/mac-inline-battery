@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=mcOS BS Inline Battery
+Name=mcOS BS Inline Battery Fix
 
 Type=Service
 Icon=battery
@@ -10,7 +10,7 @@ X-Plasma-MainScript=ui/main.qml
 
 X-KDE-PluginInfo-Author=Kelvin Zhang. Modified by F.Korpsvrat
 X-KDE-PluginInfo-Email=me@kelvinzhang.ca
-X-KDE-PluginInfo-Name=org.kde.plasma.bigSur-inlineBattery
+X-KDE-PluginInfo-Name=org.kde.plasma.bigSur-inlineBattery-fix
 X-KDE-PluginInfo-Version=5
 X-KDE-PluginInfo-Website=https://kelvinzhang.ca
 X-KDE-PluginInfo-Category=System Information
