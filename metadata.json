@@ -8,8 +8,8 @@
         ],
         "Category": "System Information",
         "Icon": "battery",
-        "Id": "org.kde.plasma.bigSur-inlineBattery-fix",
-        "Name": "mcOS BS Inline Battery Fix",
+        "Id": "org.kde.plasma.bigSur-inlineBattery",
+        "Name": "mcOS BS Inline Battery",
         "Version": "6",
         "Website": "https://kelvinzhang.ca"
     },
