@@ -1,10 +1,11 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.kcoreaddons 1.0 as KCoreAddons
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.plasma.extras as PlasmaExtras
+import org.kde.kcmutils as KCM
+
 
 import ".."
 import "../lib"
@@ -70,7 +71,6 @@ ConfigPage {
 			}
 		}
 	}
-	ExclusiveGroup { id: percentageAlign }
 	ConfigSection {
 		label: i18n("Percentage")
 
@@ -87,14 +87,14 @@ ConfigPage {
 		RowLayout {
 			RadioButton {
 				text: i18n("Left")
-				exclusiveGroup: percentageAlign
+				autoExclusive: true
 				checked: plasmoid.configuration.alignLeft
 				enabled: plasmoid.configuration.showPercentage
 				onClicked: plasmoid.configuration.alignLeft = true
 			}
 			RadioButton {
 				text: i18n("Right")
-				exclusiveGroup: percentageAlign
+				autoExclusive: true
 				checked: !plasmoid.configuration.alignLeft
 				enabled: plasmoid.configuration.showPercentage
 				onClicked: plasmoid.configuration.alignLeft = false

@@ -1,20 +1,24 @@
-import QtQuick 2.1
-import QtQuick.Layouts 1.3
+import QtQuick
+import QtQuick.Layouts
 import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponent
-import org.kde.kcoreaddons 1.0 as KCoreAddons
+import org.kde.plasma.core as PlasmaCore
+import org.kde.kitemmodels as KItemModels
+import org.kde.plasma.components 3.0 as PlasmaComponent
+import org.kde.coreaddons as KCoreAddons
+import org.kde.plasma.plasma5support as Plasma5Support
+import org.kde.kirigami as Kirigami
+import org.kde.config
 
-import org.kde.kquickcontrolsaddons 2.0
+import org.kde.kquickcontrolsaddons
 import "logic.js" as Logic
 
-Item {
-	id: batterywidget
+PlasmoidItem {
+    id: batterywidget
 
-	AppletConfig { id: config }
+    AppletConfig { id: config }
 
-	// https://github.com/KDE/plasma-workspace/blob/master/dataengines/powermanagement/powermanagementengine.h
-	// https://github.com/KDE/plasma-workspace/blob/master/dataengines/powermanagement/powermanagementengine.cpp
+    // https://github.com/KDE/plasma-workspace/blob/master/dataengines/powermanagement/powermanagementengine.h
+    // https://github.com/KDE/plasma-workspace/blob/master/dataengines/powermanagement/powermanagementengine.cpp
 
     Plasmoid.status: {
         if (powermanagementDisabled) {
@@ -32,7 +36,7 @@ Item {
         return PlasmaCore.Types.PassiveStatus
     }
 
-     Plasmoid.toolTipMainText: {
+     toolTipMainText: {
         if (batteries.count === 0) {
             return i18n("No Batteries Available");
         } else if (!pmSource.data["Battery"]["Has Cumulative"]) {
@@ -62,7 +66,7 @@ Item {
         }
     }
 
-    Plasmoid.toolTipSubText: powermanagementDisabled ? i18n("Power management is disabled") : ""
+    toolTipSubText: powermanagementDisabled ? i18n("Power management is disabled") : ""
 
     property bool disableBrightnessUpdate: true
     property int screenBrightness
@@ -81,7 +85,7 @@ Item {
                                  "powerdevilactivitiesconfig",
                                  "powerdevilglobalconfig"]
 
-    readonly property bool kcmsAuthorized: KCMShell.authorize(batterywidget.kcms).length > 0
+    readonly property bool kcmsAuthorized: KAuthorized.authorizeControlModule(batterywidget.kcms).length > 0
 
     onScreenBrightnessChanged: {
         if (disableBrightnessUpdate) {
@@ -119,170 +123,178 @@ Item {
         }
     }
 
-    property QtObject batteries: PlasmaCore.SortFilterModel {
+    property QtObject batteries: KItemModels.KSortFilterProxyModel {
         id: batteries
-        filterRole: "Is Power Supply"
+        filterRoleName: "Is Power Supply"
         sortOrder: Qt.DescendingOrder
-        sourceModel: PlasmaCore.SortFilterModel {
-            sortRole: "Pretty Name"
+        sourceModel: KItemModels.KSortFilterProxyModel {
+            sortRoleName: "Pretty Name"
             sortOrder: Qt.AscendingOrder
             sortCaseSensitivity: Qt.CaseInsensitive
-            sourceModel: PlasmaCore.DataModel {
+            sourceModel: Plasma5Support.DataModel {
                 dataSource: pmSource
                 sourceFilter: "Battery[0-9]+"
             }
         }
     }
 
-	  // PlasmaCore.DataSource {
-    property QtObject pmSource: PlasmaCore.DataSource {
-		    id: pmSource
-		    engine: "powermanagement"
-		    connectedSources: sources
-		    onSourceAdded: {
-			      // console.log('onSourceAdded', source)
-			      disconnectSource(source)
-			      connectSource(source)
-		    }
-		    onSourceRemoved: {
-			      disconnectSource(source)
-		    }
+      // PlasmaCore.DataSource {
+    property QtObject pmSource: Plasma5Support.DataSource {
+            id: pmSource
+            engine: "powermanagement"
+            connectedSources: sources
+            onSourceAdded: source => {
+                  // console.log('onSourceAdded', source)
+                  disconnectSource(source)
+                  connectSource(source)
+            }
+            onSourceRemoved: {
+                  disconnectSource(source)
+            }
 
         onDataChanged: {
             Logic.updateBrightness(batterywidget, pmSource)
             Logic.updateInhibitions(batterywidget, pmSource)
         }
 
-	  }
+      }
 
 
-	function getData(sourceName, key, def) {
-		var source = pmSource.data[sourceName]
-		if (typeof source === 'undefined') {
-			return def;
-		} else {
-			var value = source[key]
-			if (typeof value === 'undefined') {
-				return def;
-			} else {
-				return value;
-			}
-		}
-	}
-
-	  property string currentBatteryName: 'Battery'
-	  property string currentBatteryState: getData(currentBatteryName, 'State', false)
-	  property int currentBatteryPercent: getData(currentBatteryName, 'Percent', 100)
-	  property bool currentBatteryLowPower: currentBatteryPercent <= config.lowBatteryPercent
-	  property color currentTextColor: {
-		    if (currentBatteryLowPower) {
-			      return config.lowBatteryColor
-		    } else {
-			      return config.normalColor
-		    }
-	  }
-
-
-	  Plasmoid.compactRepresentation: Item {
-		    id: panelItem
-
-        MouseArea {
-            id: desktopMouseArea
-            anchors.fill: parent
-
-            onClicked:
-            {
-                plasmoid.expanded = !plasmoid.expanded
+    function getData(sourceName, key, def) {
+        var source = pmSource.data[sourceName]
+        if (typeof source === 'undefined') {
+            return def;
+        } else {
+            var value = source[key]
+            if (typeof value === 'undefined') {
+                return def;
+            } else {
+                return value;
             }
         }
+    }
 
-		    Layout.minimumWidth: gridLayout.implicitWidth
-		    Layout.preferredWidth: gridLayout.implicitWidth
+      property string currentBatteryName: 'Battery'
+      property string currentBatteryState: getData(currentBatteryName, 'State', false)
+      property int currentBatteryPercent: getData(currentBatteryName, 'Percent', 100)
+      property bool currentBatteryLowPower: currentBatteryPercent <= config.lowBatteryPercent
+      property color currentTextColor: {
+            if (currentBatteryLowPower) {
+                  return config.lowBatteryColor
+            } else {
+                  return config.normalColor
+            }
+      }
 
-		    Layout.minimumHeight: gridLayout.implicitHeight
-		    Layout.preferredHeight: gridLayout.implicitHeight
 
-		    // property int textHeight: Math.max(6, Math.min(panelItem.height, 16 * units.devicePixelRatio))
-		    property int textHeight: 12 * units.devicePixelRatio
-		    // onTextHeightChanged: console.log('textHeight', textHeight)
+      compactRepresentation: Item {
+            id: panelItem
 
-		    GridLayout {
-			      id: gridLayout
-			      anchors.fill: parent
+            anchors.fill: parent
 
-			      // The rect around the Text items in the vertical layout should provide 2 pixels above
-			      // and below. Adding extra space will make the space between the percentage and time left
-			      // labels look bigger than the space between the icon and the percentage.
-			      // So for vertical layouts, we'll add the spacing to just the icon.
-			      property int spacing: 4 * units.devicePixelRatio
-			      columnSpacing: spacing
-			      rowSpacing: 0
+            MouseArea {
+                id: desktopMouseArea
 
-			      PlasmaComponent.Label {
-				        id: percentTextLeft
-				        visible: plasmoid.configuration.showPercentage && !!plasmoid.configuration.alignLeft
-				        anchors.right: batteryIconContainer.left
-				        anchors.rightMargin: config.padding
-				        text: {
-					          if (currentBatteryPercent >= 0) {
-						            return '' + currentBatteryPercent + '%'
-					          } else {
-						            return '100%';
-					          }
-				        }
-				        font.pixelSize: config.fontSize
-				        fontSizeMode: Text.Fit
-				        horizontalAlignment: Text.AlignHCenter
-				        verticalAlignment: Text.AlignVCenter
-				        color: currentTextColor
-			      }
+                anchors.fill: parent
 
-			      Item {
-				        id: batteryIconContainer
-				        visible: plasmoid.configuration.showBatteryIcon
-				        width: config.iconWidth * units.devicePixelRatio
-				        height: config.iconHeight * units.devicePixelRatio
-				        anchors.verticalCenter: parent.verticalCenter
+                onClicked:
+                {
+                    batterywidget.expanded = !batterywidget.expanded
+                }
+            }
 
-				        MacBatteryIcon {
-					          id: batteryIcon
-					          width: Math.min(parent.width, config.iconWidth * units.devicePixelRatio)
-					          height: Math.min(parent.height, config.iconHeight * units.devicePixelRatio)
-					          anchors.centerIn: parent
-					          charging: currentBatteryState == "Charging"
-					          charge: currentBatteryPercent
-					          normalColor: config.normalColor
-					          chargingColor: config.chargingColor
-					          lowBatteryColor: config.lowBatteryColor
-					          lowBatteryPercent: plasmoid.configuration.lowBatteryPercent
-				        }
-			      }
+                GridLayout {
+                  id: gridLayout
+                  // The rect around the Text items in the vertical layout should provide 2 pixels above
+                  // and below. Adding extra space will make the space between the percentage and time left
+                  // labels look bigger than the space between the icon and the percentage.
+                  // So for vertical layouts, we'll add the spacing to just the icon.
+                  property int spacing: 4
+                  columnSpacing: spacing
+                  rowSpacing: 0
+                  anchors.fill: parent
+                implicitWidth: parent.width
+                implicitHeight: parent.height
 
-			      PlasmaComponent.Label {
-				        id: percentTextRight
-				        visible: plasmoid.configuration.showPercentage && !plasmoid.configuration.alignLeft
-				        anchors.left: batteryIconContainer.right
-				        anchors.leftMargin: config.padding
-				        text: {
-					          if (currentBatteryPercent >= 0) {
-						            return '' + currentBatteryPercent + '%'
-					          } else {
-						            return '100%';
-					          }
-				        }
-				        font.pixelSize: config.fontSize
-				        fontSizeMode: Text.Fit
-				        horizontalAlignment: Text.AlignHCenter
-				        verticalAlignment: Text.AlignVCenter
-				        color: currentTextColor
-			      }
-		    }
-	  }
+                Component.onCompleted: () => console.log(gridLayout.implicitHeight, batteryIcon.implicitHeight)
 
-    Plasmoid.fullRepresentation: PopupDialog {
+                  PlasmaComponent.Label {
+                        id: percentTextLeft
+                        visible: plasmoid.configuration.showPercentage && !!plasmoid.configuration.alignLeft
+                        
+                        Layout.alignment: Qt.AlignLeft
+                        Layout.rightMargin: config.padding
+                        text: {
+                              if (currentBatteryPercent >= 0) {
+                                    return '' + currentBatteryPercent + '%'
+                              } else {
+                                    return '100%';
+                              }
+                        }
+                        font.pixelSize: config.fontSize
+                        fontSizeMode: Text.Fit
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: currentTextColor
+                  }
+                
+
+
+                MacBatteryIcon {
+                        id: batteryIcon
+                        visible: plasmoid.configuration.showBatteryIcon
+                        width: config.iconWidth
+                        height: config.iconHeight
+                        implicitWidth: config.iconWidth
+                        implicitHeight: config.iconHeight
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        charging: currentBatteryState == "Charging"
+                        charge: currentBatteryPercent
+                        normalColor: config.normalColor
+                        chargingColor: config.chargingColor
+                        lowBatteryColor: config.lowBatteryColor
+                        lowBatteryPercent: plasmoid.configuration.lowBatteryPercent
+
+                }
+
+                  PlasmaComponent.Label {
+                        id: percentTextRight
+                        visible: plasmoid.configuration.showPercentage && !plasmoid.configuration.alignLeft
+                        Layout.alignment: Qt.AlignRight
+                        Layout.leftMargin: config.padding
+                        text: {
+                              if (currentBatteryPercent >= 0) {
+                                    return '' + currentBatteryPercent + '%'
+                              } else {
+                                    return '100%';
+                              }
+                        }
+                        font.pixelSize: config.fontSize
+                        fontSizeMode: Text.Fit
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color: currentTextColor
+                  }
+
+                }
+
+            Layout.minimumWidth: gridLayout.implicitWidth
+            Layout.preferredWidth: gridLayout.implicitWidth
+
+            Layout.minimumHeight: gridLayout.implicitHeight
+            Layout.preferredHeight: gridLayout.implicitHeight
+            
+            // property int textHeight: Math.max(6, Math.min(panelItem.height, 16 * Kirigami.Units.gridUnit))
+            property int textHeight: 12 * Kirigami.Units.gridUnit
+            // onTextHeightChanged: console.log('textHeight', textHeight)
+
+
+      }
+
+    fullRepresentation: PopupDialog {
         id: dialogItem
-        Layout.minimumWidth: units.iconSizes.medium * 9
-        Layout.minimumHeight: units.gridUnit * 15
+        Layout.minimumWidth: Kirigami.Units.iconSizes.medium * 9
+        Layout.minimumHeight: Kirigami.Units.gridUnit * 15
         // TODO Probably needs a sensible preferredHeight too
 
         model: plasmoid.expanded ? batteries : null

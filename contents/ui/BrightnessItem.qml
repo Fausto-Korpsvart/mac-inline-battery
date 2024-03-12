@@ -18,24 +18,24 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Layouts
 
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as Components
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components 3.0 as Components
+import org.kde.kirigami as Kirigami
 
 RowLayout {
     property alias icon: brightnessIcon.source
     property alias label: brightnessLabel.text
     property alias value: brightnessSlider.value
-    property alias maximumValue: brightnessSlider.maximumValue
 
-    spacing: units.gridUnit
+    spacing: Kirigami.Units.gridUnit
 
-    PlasmaCore.IconItem {
+    Kirigami.Icon {
         id: brightnessIcon
         Layout.alignment: Qt.AlignTop
-        Layout.preferredWidth: units.iconSizes.medium
+        Layout.preferredWidth: Kirigami.Units.iconSizes.medium
         Layout.preferredHeight: width
     }
 
@@ -56,8 +56,10 @@ RowLayout {
             width: parent.width
             // Don't allow the slider to turn off the screen
             // Please see https://git.reviewboard.kde.org/r/122505/ for more information
-            minimumValue: maximumValue > 100 ? 1 : 0
+            from: to > 100 ? 1 : 0
             stepSize: 1
         }
     }
+
+    property alias maximumValue: brightnessSlider.to
 }

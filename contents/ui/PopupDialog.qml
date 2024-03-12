@@ -18,11 +18,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as Components
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.kquickcontrolsaddons 2.0
+import QtQuick
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components 3.0 as Components
+import org.kde.kquickcontrolsaddons
+import org.kde.kirigami as Kirigami
 
 FocusScope {
     id: dialog
@@ -53,8 +53,8 @@ FocusScope {
     Column {
         id: settingsColumn
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width - units.gridUnit
-        spacing: Math.round(units.gridUnit / 2)
+        width: parent.width - Kirigami.Units.gridUnit
+        spacing: Math.round(Kirigami.Units.gridUnit / 2)
 
         Components.Label {
             // this is just for metrics, TODO use TextMetrics in 5.4 instead
@@ -86,7 +86,8 @@ FocusScope {
             // Manually dragging the slider around breaks the binding
             Connections {
                 target: batterywidget
-                onScreenBrightnessChanged: brightnessSlider.value = batterywidget.screenBrightness
+
+                function onScreenBrightnessChanged() {brightnessSlider.value = batterywidget.screenBrightness}
             }
         }
 
@@ -105,25 +106,26 @@ FocusScope {
             // Manually dragging the slider around breaks the binding
             Connections {
                 target: batterywidget
-                onKeyboardBrightnessChanged: keyboardBrightnessSlider.value = batterywidget.keyboardBrightness
+                
+                function onKeyboardBrightnessChanged() {keyboardBrightnessSlider.value = batterywidget.keyboardBrightness}
             }
         }
     }
 
-    PlasmaExtras.ScrollArea {
+    Components.ScrollView {
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: settingsColumn.bottom
-            topMargin: units.gridUnit // not divided by 2 for unified looks
+            topMargin: Kirigami.Units.gridUnit // not divided by 2 for unified looks
             bottom: dialog.bottom
         }
-        width: parent.width - units.gridUnit
+        width: parent.width - Kirigami.Units.gridUnit
 
         ListView {
             id: batteryList
 
             boundsBehavior: Flickable.StopAtBounds
-            spacing: Math.round(units.gridUnit / 2)
+            spacing: Math.round(Kirigami.Units.gridUnit / 2)
 
             KeyNavigation.tab: brightnessSlider
             KeyNavigation.backtab: pmSwitch
