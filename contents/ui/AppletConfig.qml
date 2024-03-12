@@ -1,7 +1,8 @@
-import QtQuick 2.0
+import QtQuick
+import org.kde.kirigami as Kirigami
 
 QtObject {
-	readonly property color defaultNormalColor: theme.textColor
+	readonly property color defaultNormalColor: Kirigami.Theme.textColor
 	readonly property color normalColor: plasmoid.configuration.normalColor || defaultNormalColor
 
 	readonly property color defaultChargingColor: '#1e1'

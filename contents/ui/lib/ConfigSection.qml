@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 // Alternative to GroupBox for when we want the title to always be left aligned.
 Rectangle {
@@ -8,10 +8,9 @@ Rectangle {
 	Layout.fillWidth: true
 	default property alias _contentChildren: content.data
 	property string label: ""
-
-	color: "#0c000000"
+	color: "#00000000"
 	border.width: 2
-	border.color: "#10000000"
+	border.color: "#00000000"
 	// radius: 5
 	property int padding: 8
 	implicitHeight: childrenRect.height + padding + padding

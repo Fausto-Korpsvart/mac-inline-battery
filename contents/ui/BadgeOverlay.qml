@@ -18,10 +18,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-import QtQuick 2.4
-import QtGraphicalEffects 1.0
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import QtQuick
+import QtGraphicalEffects
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components 3.0 as PlasmaComponents
 
 Item {
     property alias text: label.text
@@ -34,9 +34,9 @@ Item {
             bottom: parent.bottom
         }
         color: PlasmaCore.ColorScope.backgroundColor
-        width: Math.max(units.gridUnit, label.width + units.devicePixelRatio * 2)
+        width: Math.max(Kirigami.Units.gridUnit, label.width + Kirigami.Units.gridUnit * 2)
         height: label.height
-        radius: units.devicePixelRatio * 3
+        radius: Kirigami.Units.gridUnit * 3
         opacity: 0.9
     }
 
@@ -44,14 +44,14 @@ Item {
         id: label
         anchors.centerIn: badgeRect
         height: paintedHeight
-        font.pixelSize: Math.max(icon.height/4, theme.smallestFont.pixelSize*0.8)
+        font.pixelSize: Math.max(icon.height/4, Kirigami.Theme.smallFont.pixelSize*0.8)
     }
 
     layer.enabled: true
     layer.effect: DropShadow {
         horizontalOffset: 0
         verticalOffset: 0
-        radius: units.devicePixelRatio * 2
+        radius: Kirigami.Units.gridUnit * 2
         samples: radius*2
         color: Qt.rgba(0, 0, 0, 0.5)
     }

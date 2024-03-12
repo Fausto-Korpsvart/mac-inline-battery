@@ -1,13 +1,14 @@
-import QtQuick 2.0
+import QtQuick
 
 Item {
 	id: batteryIcon
 	property bool charging: false
 	property int charge: 0
-	property color normalColor: theme.textColor
+	property color normalColor: Kirigami.Theme.textColor
 	property color chargingColor: "#1e1"
 	property color lowBatteryColor: "#e33"
 	property int lowBatteryPercent: 20
+
 
 	Rectangle {
 		// Outline
@@ -30,7 +31,7 @@ Item {
 				color: {
 					if (charging) {
 						return chargingColor
-					} else if (charge < lowBatteryPercent) {
+					} else if (charge <= lowBatteryPercent) {
 						return lowBatteryColor
 					} else {
 						return normalColor

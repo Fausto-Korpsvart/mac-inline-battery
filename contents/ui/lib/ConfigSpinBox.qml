@@ -1,18 +1,16 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 RowLayout {
 	id: configSpinBox
 
 	property string configKey: ''
-	property alias decimals: spinBox.decimals
-	property alias horizontalAlignment: spinBox.horizontalAlignment
-	property alias maximumValue: spinBox.maximumValue
-	property alias minimumValue: spinBox.minimumValue
-	property alias prefix: spinBox.prefix
+	property alias maximumValue: spinBox.to
+	property alias minimumValue: spinBox.from
+	property alias prefix: labelBefore.text
 	property alias stepSize: spinBox.stepSize
-	property alias suffix: spinBox.suffix
+	property alias suffix: labelAfter.text
 	property alias value: spinBox.value
 
 	property alias before: labelBefore.text
@@ -30,7 +28,7 @@ RowLayout {
 		value: plasmoid.configuration[configKey]
 		// onValueChanged: plasmoid.configuration[configKey] = value
 		onValueChanged: serializeTimer.start()
-		maximumValue: 2147483647
+		to: 2147483647
 	}
 
 	Label {

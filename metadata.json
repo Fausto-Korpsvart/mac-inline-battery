@@ -1,0 +1,18 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "me@kelvinzhang.ca",
+                "Name": "Kelvin Zhang. Modified by F.Korpsvrat"
+            }
+        ],
+        "Category": "System Information",
+        "Icon": "battery",
+        "Id": "org.kde.plasma.bigSur-inlineBattery",
+        "Name": "mcOS BS Inline Battery",
+        "Version": "6",
+        "Website": "https://kelvinzhang.ca"
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API-Minimum-Version": "6.0"
+ }

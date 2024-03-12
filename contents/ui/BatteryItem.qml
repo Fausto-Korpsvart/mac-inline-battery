@@ -18,14 +18,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Layouts
 
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.workspace.components 2.0
-import org.kde.kcoreaddons 1.0 as KCoreAddons
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.plasma.extras as PlasmaExtras
+import org.kde.plasma.workspace.components
+import org.kde.coreaddons as KCoreAddons
 import "logic.js" as Logic
 
 Item {
@@ -44,14 +44,14 @@ Item {
         id: detailsLayout
 
         property int leftColumnWidth: 0
-        width: units.gridUnit * 11
+        width: Kirigami.Units.gridUnit * 11
 
         PlasmaComponents.Label {
             id: brokenBatteryLabel
             width: parent ? parent.width : implicitWidth
             wrapMode: Text.WordWrap
             text: batteryItem.isBroken && typeof model.Capacity !== "undefined" ? i18n("The capacity of this battery is %1%. This means it is broken and needs a replacement. Please contact your hardware vendor for more details.", model.Capacity) : ""
-            font.pointSize: !!detailsLayout.parent.inListView ? theme.smallestFont.pointSize : theme.defaultFont.pointSize
+            font.pointSize: !!detailsLayout.parent.inListView ? Kirigami.Theme.smallFont.pointSize : Kirigami.Theme.defaultFont.pointSize
             visible: batteryItem.isBroken
         }
 
@@ -62,7 +62,7 @@ Item {
 
             PlasmaComponents.Label {
                 id: detailsLabel
-                width: modelData.value && parent ? parent.width - detailsLayout.leftColumnWidth - units.smallSpacing : detailsLayout.leftColumnWidth + units.smallSpacing
+                width: modelData.value && parent ? parent.width - detailsLayout.leftColumnWidth - Kirigami.Units.smallSpacing : detailsLayout.leftColumnWidth + Kirigami.Units.smallSpacing
                 wrapMode: Text.NoWrap
                 onPaintedWidthChanged: { // horrible HACK to get a column layout
                     if (paintedWidth > detailsLayout.leftColumnWidth) {
@@ -78,7 +78,7 @@ Item {
                         PropertyChanges {
                             target: detailsLabel
                             horizontalAlignment: modelData.value ? Text.AlignRight : Text.AlignLeft
-                            font.pointSize: theme.smallestFont.pointSize
+                            font.pointSize: Kirigami.Theme.smallFont.pointSize
                             width: parent ? parent.width / 2 : 0
                             elide: Text.ElideNone // eliding and height: implicitHeight causes loops
                         }
@@ -101,7 +101,7 @@ Item {
             mainItem: Row {
                 id: batteryItemToolTip
 
-                property int _s: units.largeSpacing / 2
+                property int _s: Kirigami.Units.largeSpacing / 2
 
                 Layout.minimumWidth: implicitWidth + batteryItemToolTip._s
                 Layout.minimumHeight: implicitHeight + batteryItemToolTip._s * 2
@@ -115,7 +115,7 @@ Item {
                 BatteryIcon {
                     x: batteryItemToolTip._s * 2
                     y: batteryItemToolTip._s
-                    width: units.iconSizes.desktop // looks weird and small but that's what DefaultTooltip uses
+                    width: Kirigami.Units.iconSizes.desktop // looks weird and small but that's what DefaultTooltip uses
                     height: width
                     batteryType: batteryIcon.batteryType
                     percent: batteryIcon.percent
@@ -143,12 +143,12 @@ Item {
             RowLayout {
                 id: infoRow
                 width: parent.width
-                spacing: units.gridUnit
+                spacing: Kirigami.Units.gridUnit
 
                 BatteryIcon {
                     id: batteryIcon
                     Layout.alignment: Qt.AlignTop
-                    width: units.iconSizes.medium
+                    width: Kirigami.Units.iconSizes.medium
                     height: width
                     batteryType: model.Type
                     percent: model.Percent
@@ -162,7 +162,7 @@ Item {
 
                     RowLayout {
                         width: parent.width
-                        spacing: units.smallSpacing
+                        spacing: Kirigami.Units.smallSpacing
 
                         PlasmaComponents.Label {
                             id: batteryNameLabel
@@ -190,8 +190,8 @@ Item {
 
                     PlasmaComponents.ProgressBar {
                         width: parent.width
-                        minimumValue: 0
-                        maximumValue: 100
+                        from: 0
+                        to: 100
                         visible: batteryItem.isPresent
                         value: Number(model.Percent)
                     }
@@ -204,7 +204,7 @@ Item {
             property bool inListView: true
             anchors {
                 left: parent.left
-                leftMargin: batteryIcon.width + units.gridUnit
+                leftMargin: batteryIcon.width + Kirigami.Units.gridUnit
                 right: parent.right
             }
             visible: !!item

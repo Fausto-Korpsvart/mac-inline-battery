@@ -18,11 +18,12 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.1
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as Components
-import org.kde.kquickcontrolsaddons 2.0
+import QtQuick
+import QtQuick.Layouts
+import org.kde.plasma.core as PlasmaCore
+import org.kde.plasma.components 3.0 as Components
+import org.kde.kquickcontrolsaddons
+import org.kde.kirigami as Kirigami
 
 Column {
     property alias enabled: pmCheckBox.checked
@@ -31,7 +32,7 @@ Column {
 
     RowLayout {
         width: parent.width
-        spacing: units.gridUnit
+        spacing: Kirigami.Units.gridUnit
 
         MouseArea {
             Layout.fillWidth: true
@@ -48,10 +49,10 @@ Column {
 
             RowLayout {
                 width: parent.width
-                spacing: units.gridUnit
+                spacing: Kirigami.Units.gridUnit
 
                 Item {
-                    width: units.iconSizes.medium
+                    width: Kirigami.Units.iconSizes.medium
                     height: width
 
                     Components.CheckBox {
@@ -61,7 +62,7 @@ Column {
                         // we don't want to mess with the checked state but still reflect that changing it might not yield the desired result
                         opacity: inhibitions.length > 0 ? 0.5 : 1
                         Behavior on opacity {
-                            NumberAnimation { duration: units.longDuration }
+                            NumberAnimation { duration: Kirigami.Units.longDuration }
                         }
                     }
                 }
@@ -74,9 +75,9 @@ Column {
         }
 
         Components.ToolButton {
-            iconSource: "configure"
+            icon.source: "configure"
             onClicked: batterywidget.action_powerdevilkcm()
-            tooltip: i18n("Configure Power Saving...")
+            Components.ToolTip.text: i18n("Configure Power Saving...")
             visible: batterywidget.kcmsAuthorized
         }
     }
@@ -84,10 +85,10 @@ Column {
     Column {
         anchors {
             left: parent.left
-            leftMargin: units.iconSizes.medium + units.gridUnit
+            leftMargin: Kirigami.Units.iconSizes.medium + Kirigami.Units.gridUnit
             right: parent.right
         }
-        spacing: units.smallSpacing
+        spacing: Kirigami.Units.smallSpacing
 
         InhibitionHint {
             width: parent.width

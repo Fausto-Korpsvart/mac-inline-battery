@@ -17,21 +17,22 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.1
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as Components
+import QtQuick
+import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components 3.0 as Components
+import org.kde.kirigami as Kirigami
 
 RowLayout {
     property alias iconSource: iconItem.source
     property alias text: label.text
 
-    spacing: units.smallSpacing
+    spacing: Kirigami.Units.smallSpacing
 
-    PlasmaCore.IconItem {
+    Kirigami.Icon {
         id: iconItem
-        Layout.preferredWidth: units.iconSizes.medium
-        Layout.preferredHeight: units.iconSizes.medium
+        Layout.preferredWidth: Kirigami.Units.iconSizes.medium
+        Layout.preferredHeight: Kirigami.Units.iconSizes.medium
         visible: valid
     }
 
@@ -39,7 +40,7 @@ RowLayout {
         id: label
         Layout.fillWidth: true
         height: implicitHeight
-        font.pointSize: theme.smallestFont.pointSize
+        font.pointSize: Kirigami.Theme.smallFont.pointSize
         wrapMode: Text.WordWrap
         elide: Text.ElideRight
         maximumLineCount: 3
